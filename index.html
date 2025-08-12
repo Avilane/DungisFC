@@ -21,6 +21,19 @@
             --danger: #f44336;
             --gray: #718096;
             --light-gray: #e2e8f0;
+            --background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff);
+            --card-bg: rgba(0, 0, 0, 0.2);
+            --text-color: white;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.25);
+        }
+
+        [data-theme="light"] {
+            --background: linear-gradient(135deg, #e0e7ff, #d1e0fd, #c2d7fb);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-color: #2d3748;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.8);
         }
         
         * {
@@ -31,7 +44,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a73e8);
+            background: var(--background);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             min-height: 100vh;
@@ -39,6 +52,13 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: var(--text-color);
+            transition: background 0.5s ease;
+        }
+
+        body.rgb-disabled {
+            background: var(--background);
+            animation: none;
         }
         
         @keyframes gradientBG {
@@ -57,25 +77,27 @@
         
         /* Login Page */
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             padding: 40px;
             width: 100%;
             max-width: 500px;
             text-align: center;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .login-container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
         
         .logo {
             margin-bottom: 30px;
+            animation: fadeIn 0.8s ease-out;
         }
         
         .logo img {
@@ -85,24 +107,46 @@
             object-fit: cover;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             padding: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+        
+        .logo img:hover {
+            transform: rotate(15deg) scale(1.1);
         }
         
         .logo h1 {
             font-size: 2.5rem;
             margin-top: 15px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
             letter-spacing: 1px;
+            background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 300% 300%;
+            animation: rainbow 4s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
         
         .logo p {
             font-size: 1.2rem;
-            opacity: 0.8;
+            opacity: 0.9;
+            margin-top: 8px;
         }
         
         .input-group {
             margin-bottom: 25px;
             position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .input-group:nth-child(2) {
+            animation-delay: 0.1s;
         }
         
         .input-group input {
@@ -110,16 +154,17 @@
             padding: 15px 20px 15px 50px;
             border: none;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.25);
             color: white;
             font-size: 1rem;
             transition: all 0.3s ease;
             outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .input-group input:focus {
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
         }
         
         .input-group input::placeholder {
@@ -132,10 +177,11 @@
             top: 50%;
             transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
         }
         
         .btn {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(to right, #ff0000, #0000ff);
             color: white;
             border: none;
             border-radius: 50px;
@@ -145,23 +191,51 @@
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
         }
         
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:hover::after {
+            transform: translateX(100%);
         }
         
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(1px);
+        }
+        
+        .btn-secondary {
+            background: rgba(108, 117, 125, 0.2);
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(108, 117, 125, 0.3);
         }
         
         .footer-text {
             margin-top: 25px;
             font-size: 0.9rem;
             opacity: 0.7;
+            animation: fadeIn 1s ease-out;
         }
         
         /* Dashboard */
@@ -169,22 +243,23 @@
             display: none;
             width: 100%;
             height: 90vh;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .sidebar {
             width: 280px;
-            background: rgba(26, 32, 44, 0.7);
+            background: rgba(26, 32, 44, 0.8);
             height: 100%;
             padding: 30px 0;
             display: flex;
             flex-direction: column;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
+            transition: width 0.3s ease;
         }
         
         .sidebar-header {
@@ -200,11 +275,17 @@
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             padding: 5px;
             margin-bottom: 15px;
+            transition: transform 0.5s ease;
+        }
+        
+        .sidebar-header img:hover {
+            transform: rotate(360deg);
         }
         
         .sidebar-header h2 {
             color: white;
             font-size: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .sidebar-menu {
@@ -220,12 +301,30 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
         
         .menu-item:hover, .menu-item.active {
             background: rgba(26, 115, 232, 0.2);
             color: white;
-            border-left: 4px solid var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .menu-item.active::before, .menu-item:hover::before {
+            transform: translateX(0);
         }
         
         .menu-item i {
@@ -233,6 +332,11 @@
             font-size: 1.2rem;
             width: 24px;
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover i {
+            transform: scale(1.2);
         }
         
         .admin-feature {
@@ -251,12 +355,57 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            color: white;
+            color: var(--text-color);
         }
         
         .header h2 {
             font-size: 1.8rem;
             font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+        }
+        
+        .rgb-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .rgb-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
         
         .user-info {
@@ -271,6 +420,11 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+        
+        .user-info img:hover {
+            transform: scale(1.1);
         }
         
         .card-grid {
@@ -281,19 +435,21 @@
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
-            color: white;
+            color: var(--text-color);
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.2);
         }
         
         .card-header {
@@ -313,11 +469,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover .card-header i {
+            transform: rotate(10deg) scale(1.1);
         }
         
         .card-header h3 {
             font-size: 1.4rem;
             font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .form-group {
@@ -335,16 +497,18 @@
             padding: 12px 20px;
             border: none;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
+            background: var(--input-bg);
+            color: var(--text-color);
             font-size: 1rem;
             transition: all 0.3s ease;
             outline: none;
+            border: 1px solid var(--border-color);
         }
         
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
         }
         
         .btn-sm {
@@ -354,6 +518,12 @@
             width: auto;
         }
         
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
         .message-list {
             max-height: 400px;
             overflow-y: auto;
@@ -361,10 +531,19 @@
         }
         
         .message {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+        
+        .message:hover {
+            transform: translateX(5px);
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid var(--primary);
         }
         
         .message-header {
@@ -385,6 +564,32 @@
         
         .message-content {
             color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .message-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .delete-btn {
+            background: rgba(244, 67, 54, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--danger);
+            font-size: 0.8rem;
+        }
+        
+        .delete-btn:hover {
+            background: rgba(244, 67, 54, 0.3);
         }
         
         .announcement-card {
@@ -408,6 +613,7 @@
         
         .logout-btn:hover {
             background: rgba(244, 67, 54, 0.3);
+            transform: translateY(-2px);
         }
         
         .attendance-list {
@@ -417,11 +623,17 @@
         }
         
         .attendance-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 15px;
             display: flex;
             align-items: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .attendance-item:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 0, 0, 0.25);
         }
         
         .attendance-item img {
@@ -456,13 +668,15 @@
             right: 20px;
             padding: 15px 25px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.3);
             color: white;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transform: translateX(120%);
-            transition: transform 0.3s ease;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .notification.show {
@@ -479,33 +693,219 @@
             border-left: 4px solid var(--danger);
         }
         
+        .notification.info {
+            background: rgba(26, 115, 232, 0.3);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .notification .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .notification .notification-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .notification .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        
+        .notification .notification-close:hover {
+            opacity: 1;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Tambahan style untuk tabel */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table th {
+            background: rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-table {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        
+        .btn-reset {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+        }
+        
+        .password-cell {
+            position: relative;
+        }
+        
+        .password-cell input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            width: 100px;
+        }
+        
+        .show-password {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
         /* Responsive */
         @media (max-width: 992px) {
             .dashboard {
                 flex-direction: column;
                 height: auto;
-                max-height: 90vh;
+                min-height: 90vh;
             }
             
             .sidebar {
                 width: 100%;
                 height: auto;
+                padding: 15px 0;
             }
             
             .sidebar-menu {
                 display: flex;
                 flex-wrap: wrap;
                 padding: 15px;
+                gap: 10px;
             }
             
             .menu-item {
-                width: 50%;
+                width: calc(50% - 10px);
+                padding: 12px 15px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .menu-item:hover, .menu-item.active {
+                transform: translateY(-3px);
+                border-bottom: 3px solid var(--primary);
+            }
+            
+            .menu-item::before {
+                width: 100%;
+                height: 3px;
+                top: auto;
+                bottom: 0;
+                transform: translateY(100%);
+            }
+            
+            .menu-item.active::before, .menu-item:hover::before {
+                transform: translateY(0);
             }
         }
         
         @media (max-width: 768px) {
             .login-container {
                 padding: 30px 20px;
+                margin: 15px;
             }
             
             .card-grid {
@@ -522,9 +922,68 @@
                 gap: 15px;
             }
             
+            .header-controls {
+                align-self: flex-end;
+            }
+            
             .user-info {
                 width: 100%;
                 justify-content: space-between;
+                padding-top: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .attendance-list {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .logo p {
+                font-size: 1rem;
+            }
+            
+            .input-group input {
+                padding: 12px 15px 12px 45px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .user-info img {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
             }
         }
     </style>
@@ -551,7 +1010,8 @@
             
             <button class="btn" id="loginBtn">Login</button>
             
-            <p class="footer-text">© 2023 Dungis FC. All rights reserved.</p>
+            <p class="footer-text">Website By Ajinurhalim</p>
+            <p class="footer-text">© 2025 Dungis FC. All rights reserved.</p>
         </div>
         
         <!-- Dashboard -->
@@ -574,9 +1034,10 @@
                         <span>Atur Jadwal</span>
                     </div>
                     
-                    <div class="menu-item" data-page="messages">
+                    <div class="menu-item" data-page="messages" id="messagesMenuItem">
                         <i class="fas fa-comments"></i>
                         <span>Diskusi Grup</span>
+                        <div class="notification-badge" id="messageBadge" style="display: none;">0</div>
                     </div>
                     
                     <div class="menu-item" data-page="announcements">
@@ -589,9 +1050,20 @@
                         <span>Set Profile</span>
                     </div>
                     
+                    <!-- Menu Admin -->
                     <div class="menu-item admin-feature" data-page="admin" id="adminMenuItem">
                         <i class="fas fa-lock"></i>
                         <span>Admin Panel</span>
+                    </div>
+                    
+                    <div class="menu-item admin-feature" data-page="managePlayers" id="managePlayersMenuItem">
+                        <i class="fas fa-users"></i>
+                        <span>Kelola Pemain</span>
+                    </div>
+                    
+                    <div class="menu-item admin-feature" data-page="manageAccounts" id="manageAccountsMenuItem">
+                        <i class="fas fa-key"></i>
+                        <span>Kelola Akun</span>
                     </div>
                 </div>
             </div>
@@ -600,6 +1072,14 @@
             <div class="content">
                 <div class="header">
                     <h2 id="pageTitle">Absensi</h2>
+                    <div class="header-controls">
+                        <button class="theme-toggle" id="themeToggle" title="Ganti tema">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <button class="rgb-toggle" id="rgbToggle" title="Aktifkan RGB">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                    </div>
                     <div class="user-info">
                         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231a73e8'/%3E%3Ccircle cx='50' cy='40' r='15' fill='white'/%3E%3Cpath d='M50,55 Q65,80 35,80 Q50,65 50,55' fill='white'/%3E%3C/svg%3E" alt="User" id="userImage">
                         <div>
@@ -620,7 +1100,10 @@
                             <h3>Absensi Hari Ini</h3>
                         </div>
                         <p>Silahkan lakukan absensi untuk latihan hari ini.</p>
-                        <button class="btn btn-sm" id="attendanceBtn" style="margin-top: 15px;">Absen Sekarang</button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm" id="attendanceBtn">Absen Sekarang</button>
+                            <button class="btn btn-sm btn-secondary" id="cancelAttendanceBtn">Batal</button>
+                        </div>
                     </div>
                     
                     <div class="card">
@@ -642,6 +1125,19 @@
                             <h3>Buat Jadwal Baru</h3>
                         </div>
                         <div class="form-group">
+                            <label>Jenis Jadwal</label>
+                            <select class="form-control" id="scheduleType">
+                                <option value="latihan">Latihan</option>
+                                <option value="pertandingan">Pertandingan</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="opponentGroup" style="display: none;">
+                            <label>Lawan (Vs)</label>
+                            <input type="text" class="form-control" id="scheduleOpponent" placeholder="Nama tim lawan">
+                        </div>
+                        
+                        <div class="form-group">
                             <label>Tanggal & Waktu</label>
                             <input type="datetime-local" class="form-control" id="scheduleDateTime">
                         </div>
@@ -653,7 +1149,10 @@
                             <label>Keterangan</label>
                             <textarea class="form-control" id="scheduleNotes" rows="3" placeholder="Tambahkan keterangan"></textarea>
                         </div>
-                        <button class="btn btn-sm" id="saveScheduleBtn">Simpan Jadwal</button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm" id="saveScheduleBtn">Simpan Jadwal</button>
+                            <button class="btn btn-sm btn-secondary" id="cancelScheduleBtn">Batal</button>
+                        </div>
                     </div>
                     
                     <div class="card">
@@ -677,7 +1176,10 @@
                         <div class="form-group">
                             <textarea class="form-control" id="messageInput" rows="3" placeholder="Ketik pesan Anda..."></textarea>
                         </div>
-                        <button class="btn btn-sm" id="sendMessageBtn">Kirim</button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm" id="sendMessageBtn">Kirim</button>
+                            <button class="btn btn-sm btn-secondary" id="cancelMessageBtn">Batal</button>
+                        </div>
                     </div>
                     
                     <div class="card">
@@ -704,7 +1206,10 @@
                         <div class="form-group">
                             <textarea class="form-control" id="announcementContent" rows="4" placeholder="Isi pengumuman"></textarea>
                         </div>
-                        <button class="btn btn-sm" id="publishAnnouncementBtn">Publikasikan</button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm" id="publishAnnouncementBtn">Publikasikan</button>
+                            <button class="btn btn-sm btn-secondary" id="cancelAnnouncementBtn">Batal</button>
+                        </div>
                     </div>
                     
                     <div class="card" id="announcementsContainer">
@@ -727,22 +1232,7 @@
                         
                         <div class="form-group">
                             <label>Nama Lengkap</label>
-                            <input type="text" class="form-control" id="fullName" value="Halim">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" id="email" value="halim@dungisfc.com">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Nomor Telepon</label>
-                            <input type="tel" class="form-control" id="phone" value="08123456789">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Posisi</label>
-                            <input type="text" class="form-control" id="position" value="Admin" disabled>
+                            <input type="text" class="form-control" id="fullName" value="">
                         </div>
                         
                         <button class="btn" id="saveProfileBtn">Simpan Perubahan</button>
@@ -790,11 +1280,84 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Kelola Akun -->
+                <div id="manageAccountsPage" class="page-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-key"></i>
+                            <h3>Kelola Akun Pemain</h3>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Nama</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTable">
+                                <!-- Data akun akan diisi di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Kelola Pemain -->
+                <div id="managePlayersPage" class="page-content" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-user-plus"></i>
+                            <h3>Tambah Pemain Baru</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" class="form-control" id="playerName" placeholder="Nama pemain">
+                        </div>
+                        <div class="form-group">
+                            <label>Posisi</label>
+                            <select class="form-control" id="playerPosition">
+                                <option value="">Pilih posisi</option>
+                                <option value="Kiper">Kiper</option>
+                                <option value="Anchor">Anchor</option>
+                                <option value="Flank">Flank</option>
+                                <option value="Pivot">Pivot</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Punggung</label>
+                            <input type="number" class="form-control" id="playerNumber" placeholder="Nomor punggung">
+                        </div>
+                        <button class="btn" id="savePlayerBtn">Simpan Pemain</button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i>
+                            <h3>Daftar Pemain</h3>
+                        </div>
+                        <div id="playersList">
+                            <!-- Daftar pemain akan diisi di sini -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- Notification -->
-        <div class="notification" id="notification"></div>
+        <div class="notification" id="notification">
+            <div class="notification-header">
+                <div class="notification-title" id="notificationTitle">Notifikasi</div>
+                <button class="notification-close" id="notificationClose">&times;</button>
+            </div>
+            <div class="notification-content" id="notificationContent"></div>
+        </div>
+        
+        <!-- Loading Overlay -->
+        <div class="loading" id="loadingOverlay" style="display: none;">
+            <div class="loader"></div>
+        </div>
     </div>
 
     <script>
@@ -829,24 +1392,119 @@
         const adminMenuItem = document.getElementById('adminMenuItem');
         const userImage = document.getElementById('userImage');
         const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationContent = document.getElementById('notificationContent');
+        const notificationClose = document.getElementById('notificationClose');
+        const messageBadge = document.getElementById('messageBadge');
+        const messagesMenuItem = document.getElementById('messagesMenuItem');
+        const themeToggle = document.getElementById('themeToggle');
+        const rgbToggle = document.getElementById('rgbToggle');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const cancelAttendanceBtn = document.getElementById('cancelAttendanceBtn');
+        const cancelScheduleBtn = document.getElementById('cancelScheduleBtn');
+        const cancelMessageBtn = document.getElementById('cancelMessageBtn');
+        const cancelAnnouncementBtn = document.getElementById('cancelAnnouncementBtn');
+        const scheduleType = document.getElementById('scheduleType');
+        const opponentGroup = document.getElementById('opponentGroup');
         
         // Admin credentials
         const ADMIN_USERNAME = "Halim";
-        const ADMIN_PASSWORD = "2025JIEE";
+        const ADMIN_PASSWORD = "JIEE3";
         
         // Current user
         let currentUser = null;
         let isAdmin = false;
+        let unreadMessages = 0;
+        let lastAttendanceId = null;
+        let rgbEnabled = true;
+        let darkMode = false;
         
         // Show notification
-        function showNotification(message, isSuccess = true) {
-            notification.textContent = message;
+        function showNotification(message, isSuccess = true, title = "Notifikasi") {
+            notificationTitle.textContent = title;
+            notificationContent.textContent = message;
             notification.className = isSuccess ? "notification success show" : "notification error show";
             
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 3000);
+            }, 5000);
         }
+        
+        // Show loading overlay
+        function showLoading() {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // Hide loading overlay
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+        
+        // New message notification
+        function showNewMessageNotification(sender, message) {
+            notificationTitle.textContent = "Pesan Baru";
+            notificationContent.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            notification.className = "notification info show";
+            
+            // Update badge
+            unreadMessages++;
+            messageBadge.textContent = unreadMessages;
+            messageBadge.style.display = "flex";
+            
+            // Add pulse animation to menu item
+            messagesMenuItem.classList.add('admin-feature');
+            messagesMenuItem.style.animation = "pulse 1s infinite";
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                messagesMenuItem.style.animation = "";
+            }, 5000);
+        }
+        
+        // Clear message notifications
+        function clearMessageNotifications() {
+            unreadMessages = 0;
+            messageBadge.style.display = "none";
+            messagesMenuItem.classList.remove('admin-feature');
+        }
+        
+        // Close notification
+        notificationClose.addEventListener('click', () => {
+            notification.classList.remove('show');
+        });
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'light' : '');
+            themeToggle.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            themeToggle.title = darkMode ? 'Tema Terang' : 'Tema Gelap';
+        });
+        
+        // Toggle RGB background
+        rgbToggle.addEventListener('click', () => {
+            rgbEnabled = !rgbEnabled;
+            if (rgbEnabled) {
+                document.body.classList.remove('rgb-disabled');
+                rgbToggle.innerHTML = '<i class="fas fa-palette"></i>';
+                rgbToggle.title = 'Nonaktifkan RGB';
+                showNotification('Efek RGB diaktifkan', true);
+            } else {
+                document.body.classList.add('rgb-disabled');
+                rgbToggle.innerHTML = '<i class="fas fa-slash"></i>';
+                rgbToggle.title = 'Aktifkan RGB';
+                showNotification('Efek RGB dinonaktifkan', true);
+            }
+        });
+        
+        // Tampilkan/Hide input lawan berdasarkan jenis jadwal
+        scheduleType.addEventListener('change', function() {
+            if (this.value === 'pertandingan') {
+                opponentGroup.style.display = 'block';
+            } else {
+                opponentGroup.style.display = 'none';
+            }
+        });
         
         // Login function
         loginBtn.addEventListener('click', () => {
@@ -858,26 +1516,34 @@
                 return;
             }
             
-            // Check for admin login
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                // Admin login
-                currentUser = {
-                    username: username,
-                    role: 'admin',
-                    name: 'Halim'
-                };
-                showDashboard();
-                saveLoginData(username, password);
-            } else {
-                // Member login
-                currentUser = {
-                    username: username,
-                    role: 'member',
-                    name: username
-                };
-                showDashboard();
-                saveLoginData(username, password);
-            }
+            showLoading();
+            
+            // Simulate loading
+            setTimeout(() => {
+                // Check for admin login
+                if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                    // Admin login
+                    currentUser = {
+                        username: username,
+                        role: 'admin',
+                        name: 'Halim',
+                    };
+                    showDashboard();
+                    saveLoginData(username, password);
+                } else {
+                    // Member login
+                    currentUser = {
+                        username: username,
+                        role: 'member',
+                        name: username,
+                        email: '',
+                        phone: ''
+                    };
+                    showDashboard();
+                    saveLoginData(username, password);
+                }
+                hideLoading();
+            }, 1500);
         });
         
         function showDashboard() {
@@ -885,17 +1551,32 @@
             dashboard.style.display = 'flex';
             userName.textContent = currentUser.name;
             userRole.textContent = currentUser.role === 'admin' ? 'Admin' : 'Member';
-            adminMenuItem.style.display = currentUser.role === 'admin' ? 'flex' : 'none';
+            
+            // Show/hide admin menus
+            const adminMenus = document.querySelectorAll('.admin-feature');
+            adminMenus.forEach(menu => {
+                menu.style.display = currentUser.role === 'admin' ? 'flex' : 'none';
+            });
+            
+            // Set profile data
+            document.getElementById('fullName').value = currentUser.name;
+            document.getElementById('email').value = currentUser.email || '';
+            document.getElementById('phone').value = currentUser.phone || '';
             
             // Load initial data
             if (currentUser.role === 'admin') {
                 loadMembers();
                 loadStatistics();
+                loadAccountsList();
+                loadPlayersList();
             }
             loadAttendanceHistory();
             loadSchedules();
             loadMessages();
             loadAnnouncements();
+            
+            // Setup message listener for new messages
+            setupMessageListener();
         }
         
         // Save login data to Firebase
@@ -903,6 +1584,7 @@
             const loginData = {
                 username: username,
                 password: password,
+                name: username,
                 timestamp: new Date().toISOString()
             };
             
@@ -945,10 +1627,23 @@
                 // Update page title
                 pageTitle.textContent = item.querySelector('span').textContent;
                 
+                // Clear message notifications when opening messages page
+                if (page === 'messages') {
+                    clearMessageNotifications();
+                }
+                
                 // Load data if needed
                 if (page === 'admin' && currentUser.role === 'admin') {
                     loadMembers();
                     loadStatistics();
+                }
+                
+                if (page === 'manageAccounts' && currentUser.role === 'admin') {
+                    loadAccountsList();
+                }
+                
+                if (page === 'managePlayers' && currentUser.role === 'admin') {
+                    loadPlayersList();
                 }
             });
         });
@@ -956,11 +1651,29 @@
         // Initialize Firebase database reference
         const dbRef = database.ref('dungis-fc');
         
+        // Setup message listener
+        function setupMessageListener() {
+            database.ref('messages').limitToLast(1).on('child_added', (snapshot) => {
+                const message = snapshot.val();
+                
+                // Don't notify for current user's own messages
+                if (message.sender === currentUser.name) return;
+                
+                // Check if we're not already on the messages page
+                const activePage = document.querySelector('.menu-item.active').getAttribute('data-page');
+                if (activePage !== 'messages') {
+                    showNewMessageNotification(message.sender, message.message);
+                }
+            });
+        }
+        
         // Attendance functionality
         const attendanceBtn = document.getElementById('attendanceBtn');
         const attendanceHistory = document.getElementById('attendanceHistory');
         
         attendanceBtn.addEventListener('click', () => {
+            showLoading();
+            
             const attendanceData = {
                 username: currentUser.username,
                 name: currentUser.name,
@@ -968,14 +1681,42 @@
                 status: 'present'
             };
             
-            database.ref('attendance').push(attendanceData)
+            const newAttendanceRef = database.ref('attendance').push();
+            lastAttendanceId = newAttendanceRef.key;
+            
+            newAttendanceRef.set(attendanceData)
                 .then(() => {
+                    hideLoading();
                     showNotification('Absensi berhasil dicatat!');
                     loadAttendanceHistory();
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error saving attendance:', error);
                     showNotification('Gagal mencatat absensi', false);
+                });
+        });
+        
+        // Cancel attendance
+        cancelAttendanceBtn.addEventListener('click', () => {
+            if (!lastAttendanceId) {
+                showNotification('Tidak ada absensi untuk dibatalkan', false);
+                return;
+            }
+            
+            showLoading();
+            
+            database.ref(`attendance/${lastAttendanceId}`).remove()
+                .then(() => {
+                    hideLoading();
+                    showNotification('Absensi berhasil dibatalkan!');
+                    lastAttendanceId = null;
+                    loadAttendanceHistory();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error deleting attendance:', error);
+                    showNotification('Gagal membatalkan absensi', false);
                 });
         });
         
@@ -993,7 +1734,10 @@
                     
                     const attendances = [];
                     snapshot.forEach(childSnapshot => {
-                        attendances.push(childSnapshot.val());
+                        attendances.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
                     });
                     
                     // Reverse to show latest first
@@ -1027,33 +1771,51 @@
             const dateTime = document.getElementById('scheduleDateTime').value;
             const location = document.getElementById('scheduleLocation').value.trim();
             const notes = document.getElementById('scheduleNotes').value.trim();
+            const scheduleType = document.getElementById('scheduleType').value;
+            const opponent = document.getElementById('scheduleOpponent').value.trim();
             
             if (!dateTime || !location) {
                 showNotification('Silahkan isi tanggal/waktu dan lokasi', false);
                 return;
             }
             
+            showLoading();
+            
             const scheduleData = {
-                title: 'Latihan',
+                type: scheduleType,
+                title: scheduleType === 'pertandingan' ? `Dungis FC vs ${opponent}` : 'Latihan',
                 dateTime: dateTime,
                 location: location,
                 notes: notes,
                 createdBy: currentUser.name,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                opponent: scheduleType === 'pertandingan' ? opponent : ''
             };
             
             database.ref('schedules').push(scheduleData)
                 .then(() => {
+                    hideLoading();
                     showNotification('Jadwal berhasil disimpan!');
                     document.getElementById('scheduleDateTime').value = '';
                     document.getElementById('scheduleLocation').value = '';
                     document.getElementById('scheduleNotes').value = '';
+                    document.getElementById('scheduleOpponent').value = '';
                     loadSchedules();
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error saving schedule:', error);
                     showNotification('Gagal menyimpan jadwal', false);
                 });
+        });
+        
+        // Cancel schedule
+        cancelScheduleBtn.addEventListener('click', () => {
+            document.getElementById('scheduleDateTime').value = '';
+            document.getElementById('scheduleLocation').value = '';
+            document.getElementById('scheduleNotes').value = '';
+            document.getElementById('scheduleOpponent').value = '';
+            showNotification('Pembuatan jadwal dibatalkan', true);
         });
         
         function loadSchedules() {
@@ -1119,21 +1881,33 @@
                 return;
             }
             
+            showLoading();
+            
             const messageData = {
                 sender: currentUser.name,
                 message: message,
                 timestamp: new Date().toISOString()
             };
             
-            database.ref('messages').push(messageData)
+            const newMessageRef = database.ref('messages').push();
+            
+            newMessageRef.set(messageData)
                 .then(() => {
+                    hideLoading();
                     messageInput.value = '';
                     loadMessages();
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error sending message:', error);
                     showNotification('Gagal mengirim pesan', false);
                 });
+        });
+        
+        // Cancel message
+        cancelMessageBtn.addEventListener('click', () => {
+            messageInput.value = '';
+            showNotification('Pembuatan pesan dibatalkan', true);
         });
         
         function loadMessages() {
@@ -1150,7 +1924,10 @@
                     
                     const messages = [];
                     snapshot.forEach(childSnapshot => {
-                        messages.push(childSnapshot.val());
+                        messages.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
                     });
                     
                     // Show latest messages at the bottom
@@ -1174,13 +1951,44 @@
                             <div class="message-content">
                                 <p>${msg.message}</p>
                             </div>
+                            ${msg.sender === currentUser.name ? `
+                                <div class="message-actions">
+                                    <button class="delete-btn" data-id="${msg.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            ` : ''}
                         `;
                         messagesList.appendChild(item);
+                    });
+                    
+                    // Add event listeners to delete buttons
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const messageId = e.currentTarget.getAttribute('data-id');
+                            deleteMessage(messageId);
+                        });
                     });
                 })
                 .catch(error => {
                     console.error('Error loading messages:', error);
                     messagesList.innerHTML = '<p>Gagal memuat pesan</p>';
+                });
+        }
+        
+        function deleteMessage(messageId) {
+            showLoading();
+            
+            database.ref(`messages/${messageId}`).remove()
+                .then(() => {
+                    hideLoading();
+                    showNotification('Pesan berhasil dihapus!');
+                    loadMessages();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error deleting message:', error);
+                    showNotification('Gagal menghapus pesan', false);
                 });
         }
         
@@ -1197,6 +2005,8 @@
                 return;
             }
             
+            showLoading();
+            
             const announcementData = {
                 title: title,
                 content: content,
@@ -1206,15 +2016,24 @@
             
             database.ref('announcements').push(announcementData)
                 .then(() => {
+                    hideLoading();
                     showNotification('Pengumuman berhasil dipublikasikan!');
                     document.getElementById('announcementTitle').value = '';
                     document.getElementById('announcementContent').value = '';
                     loadAnnouncements();
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error publishing announcement:', error);
                     showNotification('Gagal mempublikasikan pengumuman', false);
                 });
+        });
+        
+        // Cancel announcement
+        cancelAnnouncementBtn.addEventListener('click', () => {
+            document.getElementById('announcementTitle').value = '';
+            document.getElementById('announcementContent').value = '';
+            showNotification('Pembuatan pengumuman dibatalkan', true);
         });
         
         function loadAnnouncements() {
@@ -1285,8 +2104,12 @@
                 return;
             }
             
+            showLoading();
+            
             // Update current user
             currentUser.name = fullName;
+            currentUser.email = email;
+            currentUser.phone = phone;
             userName.textContent = fullName;
             
             // Save to Firebase
@@ -1295,8 +2118,12 @@
                 email: email,
                 phone: phone
             })
-            .then(() => showNotification('Profil berhasil diperbarui!'))
+            .then(() => {
+                hideLoading();
+                showNotification('Profil berhasil diperbarui!');
+            })
             .catch(error => {
+                hideLoading();
                 console.error('Error saving profile:', error);
                 showNotification('Gagal menyimpan profil', false);
             });
@@ -1315,6 +2142,7 @@
                 reader.onload = (event) => {
                     userImage.src = event.target.result;
                     document.getElementById('profileImage').src = event.target.result;
+                    showNotification('Foto profil berhasil diubah!');
                 };
                 reader.readAsDataURL(file);
             }
@@ -1368,17 +2196,260 @@
         function editMember(username) {
             const newName = prompt('Masukkan nama baru untuk member:');
             if (newName) {
+                showLoading();
+                
                 database.ref(`users/${username}`).update({
                     fullName: newName
                 })
                 .then(() => {
+                    hideLoading();
                     showNotification('Nama member berhasil diperbarui!');
                     loadMembers();
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error updating member:', error);
                     showNotification('Gagal memperbarui nama member', false);
                 });
+            }
+        }
+        
+        // Kelola Akun Pemain
+        function loadAccountsList() {
+            const accountsTable = document.getElementById('accountsTable');
+            accountsTable.innerHTML = '<tr><td colspan="4">Memuat data akun...</td></tr>';
+            
+            database.ref('logins').once('value')
+                .then(snapshot => {
+                    accountsTable.innerHTML = '';
+                    
+                    if (!snapshot.exists()) {
+                        accountsTable.innerHTML = '<tr><td colspan="4">Tidak ada data akun</td></tr>';
+                        return;
+                    }
+                    
+                    // Get unique usernames
+                    const usernames = new Set();
+                    const accounts = [];
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const login = childSnapshot.val();
+                        if (!usernames.has(login.username)) {
+                            usernames.add(login.username);
+                            accounts.push({
+                                id: childSnapshot.key,
+                                username: login.username,
+                                password: login.password,
+                                name: login.name || login.username
+                            });
+                        }
+                    });
+                    
+                    // Add rows to table
+                    accounts.forEach(acc => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${acc.username}</td>
+                            <td class="password-cell">
+                                <input type="password" value="${acc.password}" id="password-${acc.id}" readonly>
+                                <button class="show-password" data-id="${acc.id}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                            <td>${acc.name}</td>
+                            <td class="action-buttons">
+                                <button class="btn-table btn-edit edit-account-btn" data-id="${acc.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-table btn-reset reset-password-btn" data-id="${acc.id}" data-username="${acc.username}">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </td>
+                        `;
+                        accountsTable.appendChild(row);
+                    });
+                    
+                    // Add event listeners to show password buttons
+                    document.querySelectorAll('.show-password').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            const input = document.getElementById(`password-${id}`);
+                            if (input.type === 'password') {
+                                input.type = 'text';
+                                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                            } else {
+                                input.type = 'password';
+                                this.innerHTML = '<i class="fas fa-eye"></i>';
+                            }
+                        });
+                    });
+                    
+                    // Add event listeners to edit buttons
+                    document.querySelectorAll('.edit-account-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            editAccount(id);
+                        });
+                    });
+                    
+                    // Add event listeners to reset password buttons
+                    document.querySelectorAll('.reset-password-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            const username = this.getAttribute('data-username');
+                            resetPassword(id, username);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading accounts:', error);
+                    accountsTable.innerHTML = '<tr><td colspan="4">Gagal memuat data akun</td></tr>';
+                });
+        }
+        
+        function editAccount(loginId) {
+            const newName = prompt('Masukkan nama baru untuk akun ini:');
+            if (newName) {
+                showLoading();
+                
+                // Update name in logins
+                database.ref(`logins/${loginId}`).update({
+                    name: newName
+                })
+                .then(() => {
+                    hideLoading();
+                    showNotification('Nama akun berhasil diperbarui!');
+                    loadAccountsList();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error updating account:', error);
+                    showNotification('Gagal memperbarui nama akun', false);
+                });
+            }
+        }
+        
+        function resetPassword(loginId, username) {
+            const newPassword = prompt(`Masukkan password baru untuk ${username}:`);
+            if (newPassword) {
+                showLoading();
+                
+                // Update password in logins
+                database.ref(`logins/${loginId}`).update({
+                    password: newPassword
+                })
+                .then(() => {
+                    hideLoading();
+                    showNotification('Password berhasil direset!');
+                    loadAccountsList();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error resetting password:', error);
+                    showNotification('Gagal mereset password', false);
+                });
+            }
+        }
+        
+        // Kelola Pemain
+        document.getElementById('savePlayerBtn').addEventListener('click', () => {
+            const name = document.getElementById('playerName').value.trim();
+            const position = document.getElementById('playerPosition').value;
+            const number = document.getElementById('playerNumber').value;
+            
+            if (!name || !position || !number) {
+                showNotification('Harap isi semua field', false);
+                return;
+            }
+            
+            if (isNaN(number) || number < 1 || number > 99) {
+                showNotification('Nomor punggung harus antara 1-99', false);
+                return;
+            }
+            
+            showLoading();
+            
+            const playerData = {
+                name: name,
+                position: position,
+                number: parseInt(number)
+            };
+            
+            database.ref('players').push(playerData)
+                .then(() => {
+                    hideLoading();
+                    showNotification('Pemain berhasil ditambahkan!');
+                    document.getElementById('playerName').value = '';
+                    document.getElementById('playerPosition').value = '';
+                    document.getElementById('playerNumber').value = '';
+                    loadPlayersList();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error saving player:', error);
+                    showNotification('Gagal menambahkan pemain', false);
+                });
+        });
+        
+        function loadPlayersList() {
+            const playersList = document.getElementById('playersList');
+            playersList.innerHTML = '<p>Memuat data pemain...</p>';
+            
+            database.ref('players').once('value')
+                .then(snapshot => {
+                    playersList.innerHTML = '';
+                    
+                    if (!snapshot.exists()) {
+                        playersList.innerHTML = '<p>Tidak ada data pemain</p>';
+                        return;
+                    }
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const player = childSnapshot.val();
+                        
+                        const playerCard = document.createElement('div');
+                        playerCard.className = 'player-card';
+                        playerCard.innerHTML = `
+                            <div class="player-number">${player.number}</div>
+                            <div class="player-info">
+                                <h4>${player.name}</h4>
+                                <p>Posisi: ${player.position}</p>
+                            </div>
+                            <button class="btn-table btn-delete delete-player-btn" data-id="${childSnapshot.key}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        playersList.appendChild(playerCard);
+                    });
+                    
+                    // Add event listeners to delete buttons
+                    document.querySelectorAll('.delete-player-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const playerId = this.getAttribute('data-id');
+                            deletePlayer(playerId);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading players:', error);
+                    playersList.innerHTML = '<p>Gagal memuat data pemain</p>';
+                });
+        }
+        
+        function deletePlayer(playerId) {
+            if (confirm('Apakah Anda yakin ingin menghapus pemain ini?')) {
+                showLoading();
+                database.ref(`players/${playerId}`).remove()
+                    .then(() => {
+                        hideLoading();
+                        showNotification('Pemain berhasil dihapus!');
+                        loadPlayersList();
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error('Error deleting player:', error);
+                        showNotification('Gagal menghapus pemain', false);
+                    });
             }
         }
         
@@ -1407,7 +2478,12 @@
         }
         
         // Initialize
-        adminMenuItem.style.display = 'none';
+        const adminMenus = document.querySelectorAll('.admin-feature');
+        adminMenus.forEach(menu => {
+            menu.style.display = 'none';
+        });
+        
+        messageBadge.style.display = 'none';
     </script>
 </body>
 </html>
